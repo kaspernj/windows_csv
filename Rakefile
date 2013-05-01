@@ -17,8 +17,8 @@ Jeweler::Tasks.new do |gem|
   gem.name = "windows_csv"
   gem.homepage = "http://github.com/kaspernj/windows_csv"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %Q{A framework to write Windows CSV files.}
+  gem.description = %Q{A framework to write Windows CSV files.}
   gem.email = "k@spernj.org"
   gem.authors = ["kaspernj"]
   # dependencies defined in Gemfile
