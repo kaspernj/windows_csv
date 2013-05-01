@@ -15,6 +15,11 @@ class WindowsCsv
       csv_args.merge!(args[:csv_args]) if args[:csv_args]
       
       Csv_lazy.new(csv_args) do |row|
+        real = []
+        row.each do |col|
+          real << col
+        end
+        
         yield row
       end
     end
@@ -53,12 +58,16 @@ class WindowsCsv
       elsif col.is_a?(Date)
         encoded << col.strftime("%Y-%m-%d")
       else
-        encoded << col
+        encoded << WindowsCsv.escape(col)
       end
     end
     
     @csv << encoded
     
     return nil
+  end
+  
+  def self.escape(str)
+    return str.to_s.gsub("\n", "\\r\\n")
   end
 end

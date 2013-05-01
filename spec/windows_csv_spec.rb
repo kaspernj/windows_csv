@@ -11,8 +11,8 @@ describe "WindowsCsv" do
     tmpfile = "#{Dir.tmpdir}/windows_csv_test_#{Digest::MD5.hexdigest(Time.now.to_f.to_s)}.csv"
     
     WindowsCsv.new(:path => tmpfile) do |csv|
-      csv << ["Name1", "Name2", "Encoding", "Date", "Time", "DateTime"]
-      csv << ["Kasper", "Christina", "æøå", Date.new, Time.new, DateTime.new]
+      csv << ["Name1", "Name2", "Encoding", "Date", "Time", "DateTime", "MultiLine"]
+      csv << ["Kasper", "Christina", "æøå", Date.new, Time.new, DateTime.new, "Multi\nLine"]
     end
     
     #puts "Path: #{tmpfile}"
@@ -22,6 +22,7 @@ describe "WindowsCsv" do
         #puts "Row: #{row}"
         row[:Name2].should eql("Christina")
         row[:Encoding].should eql("æøå")
+        row[:MultiLine].should eql("Multi\r\nLine")
       end
     rescue => e
       puts e.inspect
