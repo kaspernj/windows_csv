@@ -1,6 +1,14 @@
-= windows_csv
+= WindowsCSV (for Ruby)
 
-Description goes here.
+Example on writing a Windows CSV file:
+ WindowsCsv.new(:path => file_path) do |csv|
+   csv << ["col1", "col2"]
+ end
+
+Example on reading a Windows CSV file:
+ WindowsCsv.foreach(file_path) do |row|
+   puts row
+ end
 
 == Contributing to windows_csv
  
