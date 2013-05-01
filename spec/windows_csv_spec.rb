@@ -11,15 +11,17 @@ describe "WindowsCsv" do
     tmpfile = "#{Dir.tmpdir}/windows_csv_test_#{Digest::MD5.hexdigest(Time.now.to_f.to_s)}.csv"
     
     WindowsCsv.new(:path => tmpfile) do |csv|
+      csv << ["Name1", "Name2", "Encoding", "Date", "Time", "DateTime"]
       csv << ["Kasper", "Christina", "æøå", Date.new, Time.new, DateTime.new]
     end
     
-    puts "Path: #{tmpfile}"
+    #puts "Path: #{tmpfile}"
     
     begin
-      WindowsCsv.foreach(tmpfile) do |row|
+      WindowsCsv.foreach(tmpfile, :csv_args => {:headers => true}) do |row|
         #puts "Row: #{row}"
-        row[1].should eql("Christina")
+        row[:Name2].should eql("Christina")
+        row[:Encoding].should eql("æøå")
       end
     rescue => e
       puts e.inspect

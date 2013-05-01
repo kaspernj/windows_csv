@@ -4,14 +4,17 @@ class WindowsCsv
   COL_SEP = "\t"
   QUOTE_CHAR = "\""
   
-  def self.foreach(path)
+  def self.foreach(path, args = {})
     require "rubygems"
     require "csv_lazy"
     
     File.open(path, "rb", :encoding => "UTF-8") do |fp|
       fp.sysread(2)
       
-      Csv_lazy.new(:debug => false, :io => fp, :col_sep => COL_SEP, :quote_char => QUOTE_CHAR) do |row|
+      csv_args = {:debug => false, :io => fp, :col_sep => COL_SEP, :quote_char => QUOTE_CHAR}
+      csv_args.merge!(args[:csv_args]) if args[:csv_args]
+      
+      Csv_lazy.new(csv_args) do |row|
         yield row
       end
     end
