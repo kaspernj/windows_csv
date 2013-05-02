@@ -1,3 +1,4 @@
+#This class was heavily inspired by the great Dipth! https://github.com/dipth
 class WindowsCsv
   ENCODING = Encoding::UTF_8
   
