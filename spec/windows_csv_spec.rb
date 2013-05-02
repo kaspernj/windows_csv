@@ -18,7 +18,7 @@ describe "WindowsCsv" do
     #puts "Path: #{tmpfile}"
     
     WindowsCsv.foreach(tmpfile, :csv_args => {:headers => true}) do |row|
-      #puts "Row: #{row}"
+      puts "Row: #{row}"
       row[:Name2].should eql("Christina")
       row[:Encoding].should eql("æøå")
       row[:MultiLine].should eql("Multi\r\nLine")

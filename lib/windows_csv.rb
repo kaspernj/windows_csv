@@ -1,6 +1,7 @@
 class WindowsCsv
-  ENCODING = Encoding::UTF_16LE
-  BOM = "\377\376".force_encoding(ENCODING) # Byte Order Mark
+  ENCODING = Encoding::UTF_8
+  
+  BOM = "\377\376".force_encoding(Encoding::UTF_16LE) # Byte Order Mark
   COL_SEP = "\t"
   QUOTE_CHAR = "\""
   
@@ -8,9 +9,7 @@ class WindowsCsv
     require "rubygems"
     require "csv_lazy"
     
-    File.open(path, "r", :encoding => "UTF-8") do |fp|
-      fp.sysread(2)
-      
+    File.open(path, "rb:bom|utf-16le") do |fp|
       csv_args = {:debug => false, :io => fp, :col_sep => COL_SEP, :quote_char => QUOTE_CHAR}
       csv_args.merge!(args[:csv_args]) if args[:csv_args]
       
@@ -39,11 +38,7 @@ class WindowsCsv
     
     begin
       @args[:io].write(BOM)
-      
-      ::CSV.open(@args[:io], "w", :col_sep => COL_SEP, :quote_char => QUOTE_CHAR, :force_quotes => true) do |csv|
-        @csv = csv
-        yield self
-      end
+      yield self
     ensure
       fp.close if fp
     end
@@ -62,7 +57,7 @@ class WindowsCsv
       end
     end
     
-    @csv << encoded
+    @args[:io].puts CSV.generate_line(encoded, :col_sep => COL_SEP, :quote_char => QUOTE_CHAR, :force_quotes => true).encode(Encoding::UTF_16LE)
     
     return nil
   end
