@@ -8,7 +8,7 @@ class WindowsCsv
     require "rubygems"
     require "csv_lazy"
     
-    File.open(path, "rb", :encoding => "UTF-8") do |fp|
+    File.open(path, "r", :encoding => "UTF-8") do |fp|
       fp.sysread(2)
       
       csv_args = {:debug => false, :io => fp, :col_sep => COL_SEP, :quote_char => QUOTE_CHAR}
@@ -33,14 +33,14 @@ class WindowsCsv
     @args = args
     
     if @args[:path]
-      fp = File.open(@args[:path], "wb", :encoding => ENCODING)
+      fp = File.open(@args[:path], "w", :encoding => ENCODING)
       @args[:io] = fp
     end
     
     begin
       @args[:io].write(BOM)
       
-      ::CSV.open(@args[:io], "wb", :col_sep => COL_SEP, :quote_char => QUOTE_CHAR, :force_quotes => true) do |csv|
+      ::CSV.open(@args[:io], "w", :col_sep => COL_SEP, :quote_char => QUOTE_CHAR, :force_quotes => true) do |csv|
         @csv = csv
         yield self
       end
