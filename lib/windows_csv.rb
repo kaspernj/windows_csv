@@ -5,22 +5,32 @@ class WindowsCsv
   BOM = "\377\376".force_encoding(Encoding::UTF_16LE) # Byte Order Mark
   COL_SEP = "\t"
   QUOTE_CHAR = "\""
+  ROW_SEP = "\r\n"
+  ARGS = {:col_sep => COL_SEP, :quote_char => QUOTE_CHAR, :row_sep => ROW_SEP}
   
   def self.foreach(path, args = {})
-    require "rubygems"
-    require "csv_lazy"
+    require "csv"
     
     File.open(path, "rb:bom|utf-16le") do |fp|
-      csv_args = {:debug => false, :io => fp, :col_sep => COL_SEP, :quote_char => QUOTE_CHAR}
+      csv_args = ARGS.clone
       csv_args.merge!(args[:csv_args]) if args[:csv_args]
       
-      Csv_lazy.new(csv_args) do |row|
-        real = []
-        row.each do |col|
-          real << col
+      CSV.foreach(fp, csv_args) do |row|
+        if csv_args[:headers]
+          real = {}
+        else
+          real = []
         end
         
-        yield row
+        row.each do |col|
+          if csv_args[:headers]
+            real[col[0].to_sym] = WindowsCsv.unescape(col[1])
+          else
+            real << WindowsCsv.unescape(col)
+          end
+        end
+        
+        yield real
       end
     end
     
@@ -58,12 +68,16 @@ class WindowsCsv
       end
     end
     
-    @args[:io].puts CSV.generate_line(encoded, :col_sep => COL_SEP, :quote_char => QUOTE_CHAR).encode(Encoding::UTF_16LE)
+    @args[:io].puts CSV.generate_line(encoded, ARGS).encode(Encoding::UTF_16LE)
     
     return nil
   end
   
   def self.escape(str)
     return str.to_s.gsub("\n", "\\r\\n")
+  end
+  
+  def self.unescape(str)
+    return str.to_s.gsub("\\r\\n", "\r\n")
   end
 end

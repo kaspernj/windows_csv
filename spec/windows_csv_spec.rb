@@ -13,15 +13,23 @@ describe "WindowsCsv" do
     WindowsCsv.new(:path => tmpfile) do |csv|
       csv << ["Name1", "Name2", "Encoding", "Date", "Time", "DateTime", "MultiLine"]
       csv << ["Kasper", "Christina", "æøå", Date.new, Time.new, DateTime.new, "Multi\nLine"]
+      csv << ["Thomas", "Nikolaj", "læp", nil, nil, nil, nil]
     end
     
-    #puts "Path: #{tmpfile}"
+    puts "Path: #{tmpfile}"
     
+    count = 0
     WindowsCsv.foreach(tmpfile, :csv_args => {:headers => true}) do |row|
-      puts "Row: #{row}"
-      row[:Name2].should eql("Christina")
-      row[:Encoding].should eql("æøå")
-      row[:MultiLine].should eql("Multi\r\nLine")
+      count += 1
+      #puts "Row: #{row}"
+      
+      if count == 1
+        row[:Name2].should eql("Christina")
+        row[:Encoding].should eql("æøå")
+        row[:MultiLine].should eql("Multi\r\nLine")
+      end
     end
+    
+    count.should eql(2)
   end
 end
