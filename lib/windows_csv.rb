@@ -58,7 +58,7 @@ class WindowsCsv
       end
     end
     
-    @args[:io].puts CSV.generate_line(encoded, :col_sep => COL_SEP, :quote_char => QUOTE_CHAR, :force_quotes => true).encode(Encoding::UTF_16LE)
+    @args[:io].puts CSV.generate_line(encoded, :col_sep => COL_SEP, :quote_char => QUOTE_CHAR).encode(Encoding::UTF_16LE)
     
     return nil
   end
