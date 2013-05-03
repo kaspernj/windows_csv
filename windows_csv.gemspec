@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "windows_csv"
-  s.version = "0.0.6"
+  s.version = "0.0.8"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["kaspernj"]
-  s.date = "2013-05-02"
+  s.date = "2013-05-03"
   s.description = "A framework to write Windows CSV files."
   s.email = "k@spernj.org"
   s.extra_rdoc_files = [
