@@ -1,12 +1,21 @@
 #This class was heavily inspired by the great Dipth! https://github.com/dipth
 class WindowsCsv
-  ENCODING = Encoding::UTF_8
-  
   BOM = "\377\376".force_encoding(Encoding::UTF_16LE) # Byte Order Mark
   COL_SEP = "\t"
   QUOTE_CHAR = "\""
   ROW_SEP = "\r\n"
-  ARGS = {:col_sep => COL_SEP, :quote_char => QUOTE_CHAR, :row_sep => ROW_SEP}
+  
+  ARGS = {
+    :col_sep => COL_SEP,
+    :quote_char => QUOTE_CHAR,
+    :row_sep => ROW_SEP
+  }
+  
+  REPLACES = {
+    "\r\n" => "\\r\\n",
+    "\r" => "\\r",
+    "\n" => "\\n"
+  }
   
   def self.foreach(path, args = {})
     require "csv"
@@ -43,7 +52,7 @@ class WindowsCsv
     @args = args
     
     if @args[:path]
-      fp = File.open(@args[:path], "w", :encoding => ENCODING)
+      fp = File.open(@args[:path], "w", :encoding => Encoding::UTF_8)
       @args[:io] = fp
     end
     
@@ -68,16 +77,28 @@ class WindowsCsv
       end
     end
     
-    @args[:io].puts CSV.generate_line(encoded, ARGS).encode(Encoding::UTF_16LE)
+    @args[:io].write CSV.generate_line(encoded, ARGS).encode(Encoding::UTF_16LE)
     
     return nil
   end
   
   def self.escape(str)
-    return str.to_s.gsub("\n", "\\r\\n")
+    str = str.to_s
+    
+    REPLACES.each do |key, val|
+      str = str.gsub(key, val)
+    end
+    
+    return str
   end
   
   def self.unescape(str)
-    return str.to_s.gsub("\\r\\n", "\r\n")
+    str = str.to_s
+    
+    REPLACES.each do |key, val|
+      str = str.gsub(val, key)
+    end
+    
+    return str
   end
 end

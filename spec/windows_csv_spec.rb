@@ -26,7 +26,7 @@ describe "WindowsCsv" do
       if count == 1
         row[:Name2].should eql("Christina")
         row[:Encoding].should eql("æøå")
-        row[:MultiLine].should eql("Multi\r\nLine")
+        row[:MultiLine].should eql("Multi\nLine")
       end
     end
     
