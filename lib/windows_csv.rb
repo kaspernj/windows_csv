@@ -1,7 +1,7 @@
 #This class was heavily inspired by the great Dipth! https://github.com/dipth
 class WindowsCsv
   BOM = "\377\376".force_encoding(Encoding::UTF_16LE) # Byte Order Mark
-  COL_SEP = "\t"
+  COL_SEP = ";"
   QUOTE_CHAR = "\""
   ROW_SEP = "\r\n"
   
@@ -17,6 +17,7 @@ class WindowsCsv
     "\n" => "\\n"
   }
   
+  #Loops through a Windows CSV file with leading BOM, tabs as col-sep, quote char " and row sep \r\n
   def self.foreach(path, args = {})
     require "csv"
     
