@@ -5,11 +5,11 @@ class WindowsCsv
   QUOTE_CHAR = "\"".freeze
   ROW_SEP = "\r\n".freeze
 
-  ARGS = {
+  ARGS = { # rubocop:disable Style/MutableConstant
     col_sep: COL_SEP,
     quote_char: QUOTE_CHAR,
     row_sep: ROW_SEP
-  }.freeze
+  }
 
   REPLACES = {
     "\r\n" => "\\r\\n",
