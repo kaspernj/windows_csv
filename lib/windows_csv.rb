@@ -1,24 +1,24 @@
-#This class was heavily inspired by the great Dipth! https://github.com/dipth
+# This class was heavily inspired by the great Dipth! https://github.com/dipth
 class WindowsCsv
   BOM = "\377\376".force_encoding(Encoding::UTF_16LE) # Byte Order Mark
-  COL_SEP = ";"
-  QUOTE_CHAR = "\""
-  ROW_SEP = "\r\n"
+  COL_SEP = ";".freeze
+  QUOTE_CHAR = "\"".freeze
+  ROW_SEP = "\r\n".freeze
 
   ARGS = {
-    :col_sep => COL_SEP,
-    :quote_char => QUOTE_CHAR,
-    :row_sep => ROW_SEP
-  }
+    col_sep: COL_SEP,
+    quote_char: QUOTE_CHAR,
+    row_sep: ROW_SEP
+  }.freeze
 
   REPLACES = {
     "\r\n" => "\\r\\n",
     "\r" => "\\r",
     "\n" => "\\n"
-  }
+  }.freeze
 
-  #Loops through a Windows CSV file with leading BOM, tabs as col-sep, quote char " and row sep \r\n
-  def self.foreach(path, args = {})
+  # Loops through a Windows CSV file with leading BOM, tabs as col-sep, quote char " and row sep \r\n
+  def self.foreach(path, args = {}) # rubocop:disable Metrics/AbcSize
     require "csv"
 
     File.open(path, "rb:bom|utf-16le") do |fp|
@@ -53,7 +53,7 @@ class WindowsCsv
     @args = args
 
     if @args[:path]
-      fp = File.open(@args[:path], "w", :encoding => Encoding::UTF_8)
+      fp = File.open(@args[:path], "w", encoding: Encoding::UTF_8)
       @args[:io] = fp
     end
 
@@ -61,7 +61,7 @@ class WindowsCsv
       @args[:io].write(BOM)
       yield self
     ensure
-      fp.close if fp
+      fp&.close
     end
   end
 
@@ -69,7 +69,7 @@ class WindowsCsv
     encoded = []
 
     row.each do |col|
-      if col.is_a?(Time) or col.is_a?(DateTime)
+      if col.is_a?(Time) || col.is_a?(DateTime)
         encoded << col.strftime("%Y-%m-%d %H:%M")
       elsif col.is_a?(Date)
         encoded << col.strftime("%Y-%m-%d")
@@ -80,7 +80,7 @@ class WindowsCsv
 
     @args[:io].write CSV.generate_line(encoded, **ARGS).encode(Encoding::UTF_16LE)
 
-    return nil
+    nil
   end
 
   def self.escape(str)
@@ -90,7 +90,7 @@ class WindowsCsv
       str = str.gsub(key, val)
     end
 
-    return str
+    str
   end
 
   def self.unescape(str)
@@ -100,6 +100,6 @@ class WindowsCsv
       str = str.gsub(val, key)
     end
 
-    return str
+    str
   end
 end

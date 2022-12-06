@@ -9,7 +9,6 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["kaspernj"]
-  s.date = "2013-05-03"
   s.description = "A framework to write Windows CSV files."
   s.email = "k@spernj.org"
   s.extra_rdoc_files = [
@@ -20,10 +19,14 @@ Gem::Specification.new do |s|
   s.homepage = "http://github.com/kaspernj/windows_csv"
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
-  s.rubygems_version = "1.8.23"
   s.summary = "A framework to write Windows CSV files."
+  s.required_ruby_version = ">= 2.6.8"
 
-  s.add_development_dependency "rspec", "~> 3.12.0"
-  s.add_development_dependency "rdoc", "~> 3.12"
   s.add_development_dependency "bundler", ">= 1.0.0"
+  s.add_development_dependency "rspec", "~> 3.12.0"
+  s.add_development_dependency "rubocop"
+  s.add_development_dependency "rubocop-performance"
+  s.add_development_dependency "rubocop-rake"
+  s.add_development_dependency "rubocop-rspec"
+  s.metadata["rubygems_mfa_required"] = "true"
 end
